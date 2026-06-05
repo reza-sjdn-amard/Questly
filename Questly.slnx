@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="Questly.Data/Questly.Data.csproj" Id="7054386c-d07d-4ca8-aacd-1b0985b15328" />
+  <Project Path="Questly.Domain/Questly.Domain.csproj" Id="f395bd8a-fbb5-4c37-ba7c-34b87b77d3f4" />
+  <Project Path="Questly.Services/Questly.Services.csproj" Id="bd01c3e8-b530-4134-9b05-6dd9eaaf59ac" />
+  <Project Path="Questly.UI/Questly.UI.csproj" />
+</Solution>
