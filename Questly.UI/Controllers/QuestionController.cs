@@ -45,5 +45,12 @@ namespace Questly.UI.Controllers
             return RedirectToAction("Details", "Survey",
                 new { id = model.SurveyId });
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Reorder(int surveyId, List<int> questionIds)
+        {
+            await _questionService.ReorderQuestionsAsync(surveyId, questionIds);
+            return Ok();
+        }
     }
 }

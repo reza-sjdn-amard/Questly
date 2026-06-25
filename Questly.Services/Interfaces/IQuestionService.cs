@@ -16,5 +16,7 @@ namespace Questly.Services.Interfaces
         Task<bool> UpdateQuestionAsync(Question question);
 
         Task<bool> DeleteQuestionAsync(int id);
+
+        Task ReorderQuestionsAsync(int surveyId, List<int> questionIds);
     }
 }

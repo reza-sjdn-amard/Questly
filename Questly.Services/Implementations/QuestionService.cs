@@ -43,5 +43,20 @@ namespace Questly.Services.Implementations
             await _context.SaveChangesAsync();
             return true;
         }
+
+        public async Task ReorderQuestionsAsync(int surveyId, List<int> questionIds)
+        {
+            var questions = await _context.Questions
+                .Where(q => q.SurveyId == surveyId)
+                .ToListAsync();
+
+            for (int i = 0; i < questionIds.Count; i++)
+            {
+                var question = questions.First(q => q.Id == questionIds[i]);
+                question.DisplayOrder = i + 1;
+            }
+
+            await _context.SaveChangesAsync();
+        }
     }
 }
