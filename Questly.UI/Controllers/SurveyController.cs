@@ -103,5 +103,14 @@ namespace Questly.UI.Controllers
             return View(surveyResultsModel);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Clone(int id)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+
+            var newSurveyId = await _surveyService.CloneSurveyAsync(id, userId);
+
+            return RedirectToAction(nameof(Details), new { id = newSurveyId });
+        }
     }
 }

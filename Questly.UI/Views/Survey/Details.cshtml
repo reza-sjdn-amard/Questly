@@ -1,7 +1,20 @@
 ﻿@model GetSurveyViewModel
 
 <div class="container w-50 mx-auto">
-    <h1 class="mb-4">Survey Details</h1>
+    <h1 class="mb-4 d-flex justify-content-between">
+        <span>Survey Details</span>
+        <form asp-action="Clone"
+              asp-controller="Survey"
+              asp-route-id="@Model.Id"
+              method="post"
+              class="d-inline">
+
+            <button class="btn text-white" style="background-color: var(--bs-purple);">
+                Clone Survey
+            </button>
+
+        </form>
+    </h1>
     <ul class="list-group mb-4">
         <li class="list-group-item"><span class="fw-bold">Title: </span>@Model.Title</li>
         <li class="list-group-item"><span class="fw-bold">Id: </span>@Model.Id</li>

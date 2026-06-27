@@ -45,7 +45,6 @@ namespace Questly.Services.Implementations
             return surveysDto;
         }
 
-
         public async Task<bool> UpdateSurveyAsync(UpdateSurveyDto surveyDto)
         {
             var survey = _mapper.Map<Survey>(surveyDto);
@@ -163,5 +162,51 @@ namespace Questly.Services.Implementations
             return surveyResultDto;
         }
 
+        public async Task<int> CloneSurveyAsync(int surveyId, string userId)
+        {
+            var survey = await _context.Surveys
+                .Include(s => s.Questions)
+                    .ThenInclude(q => q.Options)
+                .FirstOrDefaultAsync(s => s.Id == surveyId);
+
+            if (survey == null)
+                throw new Exception("Survey not found.");
+
+            var clone = new Survey
+            {
+                Title = survey.Title + " (Copy)",
+                Description = survey.Description,
+                CreatedAt = DateTime.UtcNow,
+                UserId = userId
+            };
+
+            foreach (var question in survey.Questions.OrderBy(q => q.DisplayOrder))
+            {
+                var newQuestion = new Question
+                {
+                    Text = question.Text,
+                    Type = question.Type,
+                    IsRequired = question.IsRequired,
+                    DisplayOrder = question.DisplayOrder
+                };
+
+                foreach (var option in question.Options.OrderBy(o => o.DisplayOrder))
+                {
+                    newQuestion.Options.Add(new QuestionOption
+                    {
+                        Text = option.Text,
+                        DisplayOrder = option.DisplayOrder
+                    });
+                }
+
+                clone.Questions.Add(newQuestion);
+            }
+
+            _context.Surveys.Add(clone);
+
+            await _context.SaveChangesAsync();
+
+            return clone.Id;
+        }
     }
 }
