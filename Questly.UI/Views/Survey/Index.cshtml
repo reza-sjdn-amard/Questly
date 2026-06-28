@@ -17,15 +17,22 @@
     @foreach (var survey in Model)
     {
         <tr>
-            <td>@survey.Title</td>
+            <td>
+                @survey.Title
+                <span class="@(survey.IsPublished ? "bg-success" : "bg-danger") rounded-circle d-inline-block ms-1" style="padding: 6px;"></span>
+            </td>
             <td>@survey.Id</td>
             <td>@survey.CreatedAt</td>
             <td class="d-flex align-items-center gap-2">
                 <a href="@Url.Action("Edit", new { id = survey.Id })" class="btn btn-sm btn-warning">Edit</a>
                 <a href="@Url.Action("Delete", new { id = survey.Id })" class="btn btn-sm btn-danger">Delete</a>
                 <a href="@Url.Action("Details", new { id = survey.Id })" class="btn btn-sm btn-success">Details</a>
-                <a href="@Url.Action("Take", new { id = survey.Id })" class="btn btn-sm btn-primary">Take</a>
-                <a href="@Url.Action("Results", new { id = survey.Id })" class="btn btn-sm btn-info">Result</a>
+                @if (survey.IsPublished)
+                {
+                    <a href="@Url.Action("Take", new { id = survey.Id })" class="btn btn-sm btn-primary">Take</a>
+                    <a href="@Url.Action("Results", new { id = survey.Id })" class="btn btn-sm btn-info">Result</a>
+                }
+                
             </td>
         </tr>
     }

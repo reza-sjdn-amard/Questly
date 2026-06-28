@@ -12,6 +12,10 @@ namespace Questly.Services.DTOs.Survey
 
         public string? Description { get; set; }
 
+        public bool IsPublished { get; set; }
+
+        public DateTime? PublishedAt { get; set; }
+
         public List<TakeSurveyQuestionDto> Questions { get; set; } = new();
     }
 }

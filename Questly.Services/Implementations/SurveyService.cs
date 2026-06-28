@@ -23,7 +23,7 @@ namespace Questly.Services.Implementations
 
         public async Task<GetSurveyDto?> GetSurveyByIdAsync(int id)
         {
-            var survey = await _context.Surveys.FindAsync(id);
+            var survey = await _context.Surveys.AsNoTracking().FirstOrDefaultAsync(s => s.Id == id);
             var surveyDto = _mapper.Map<GetSurveyDto?>(survey);
             return surveyDto;
         }
@@ -207,6 +207,23 @@ namespace Questly.Services.Implementations
             await _context.SaveChangesAsync();
 
             return clone.Id;
+        }
+
+        public async Task PublishSurveyAsync(int surveyId)
+        {
+            var surveyDto = await GetSurveyByIdAsync(surveyId);
+            surveyDto.IsPublished = true;
+            surveyDto.PublishedAt = DateTime.Now;
+            var updatedSurveyDto = _mapper.Map<UpdateSurveyDto>(surveyDto);
+            await UpdateSurveyAsync(updatedSurveyDto);
+        }
+
+        public async Task UnpublishSurveyAsync(int surveyId)
+        {
+            var surveyDto = await GetSurveyByIdAsync(surveyId);
+            surveyDto.IsPublished = false;
+            var updatedSurveyDto = _mapper.Map<UpdateSurveyDto>(surveyDto);
+            await UpdateSurveyAsync(updatedSurveyDto);
         }
     }
 }

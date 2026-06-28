@@ -76,7 +76,7 @@ namespace Questly.UI.Controllers
         public async Task<IActionResult> Take(int id)
         {
             var surveyDto = await _surveyService.GetTakeSurveyDtoAsync(id);
-            if (surveyDto == null)
+            if (surveyDto == null || !surveyDto.IsPublished)
                 return NotFound();
             var surveyModel = _mapper.Map<TakeSurveyViewModel>(surveyDto);
             return View(surveyModel);
@@ -111,6 +111,20 @@ namespace Questly.UI.Controllers
             var newSurveyId = await _surveyService.CloneSurveyAsync(id, userId);
 
             return RedirectToAction(nameof(Details), new { id = newSurveyId });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Publish(int id)
+        {
+            await _surveyService.PublishSurveyAsync(id);
+            return RedirectToAction(nameof(Details), new { id });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Unpublish(int id)
+        {
+            await _surveyService.UnpublishSurveyAsync(id);
+            return RedirectToAction(nameof(Details), new { id });
         }
     }
 }

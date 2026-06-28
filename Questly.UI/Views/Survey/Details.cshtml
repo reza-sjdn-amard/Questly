@@ -1,20 +1,35 @@
 ﻿@model GetSurveyViewModel
 
 <div class="container w-50 mx-auto">
-    <h1 class="mb-4 d-flex justify-content-between">
-        <span>Survey Details</span>
-        <form asp-action="Clone"
-              asp-controller="Survey"
-              asp-route-id="@Model.Id"
-              method="post"
-              class="d-inline">
+    <div class="mb-4 d-flex justify-content-between align-items-center">
+        <h1>Survey Details</h1>
 
-            <button class="btn text-white" style="background-color: var(--bs-purple);">
-                Clone Survey
-            </button>
+        <div class="d-flex gap-1">
+            <form asp-action="Clone"
+                  asp-controller="Survey"
+                  asp-route-id="@Model.Id"
+                  method="post"
+                  class="d-inline">
 
-        </form>
-    </h1>
+                <button class="btn btn-sm text-white" style="background-color: var(--bs-purple);">
+                    Clone
+                </button>
+
+            </form>
+
+            <form asp-action="@(Model.IsPublished ? "Unpublish" : "Publish")"
+                  asp-controller="Survey"
+                  asp-route-id="@Model.Id"
+                  method="post"
+                  class="d-inline">
+
+                <button class="btn btn-sm @(Model.IsPublished ? "btn-danger" : "btn-success")">
+                    @(Model.IsPublished ? "Unpublish" : "Publish")
+                </button>
+
+            </form>
+        </div>
+    </div>
     <ul class="list-group mb-4">
         <li class="list-group-item"><span class="fw-bold">Title: </span>@Model.Title</li>
         <li class="list-group-item"><span class="fw-bold">Id: </span>@Model.Id</li>

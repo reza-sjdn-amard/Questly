@@ -27,5 +27,9 @@ namespace Questly.Services.Interfaces
         Task<SurveyResultsDto?> GetSurveyResultsAsync(int surveyId);
 
         Task<int> CloneSurveyAsync(int surveyId, string userId);
+
+        Task PublishSurveyAsync(int surveyId);
+
+        Task UnpublishSurveyAsync(int surveyId);
     }
 }

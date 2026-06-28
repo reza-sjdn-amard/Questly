@@ -14,6 +14,10 @@ namespace Questly.Services.DTOs.Survey
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
+        public bool IsPublished { get; set; }
+
+        public DateTime? PublishedAt { get; set; }
+
         public string UserId { get; set; } = string.Empty;
 
         public ICollection<UpdateSurveyQuestionDto> Questions { get; set; } = new List<UpdateSurveyQuestionDto>();

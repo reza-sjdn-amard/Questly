@@ -12,6 +12,10 @@ namespace Questly.UI.Models.Survey
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
+        public bool IsPublished { get; set; }
+
+        public DateTime? PublishedAt { get; set; }
+
         public string UserId { get; set; } = string.Empty;
 
         public List<GetQuestionViewModel> Questions { get; set; } = new List<GetQuestionViewModel>();
