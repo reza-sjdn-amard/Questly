@@ -12,8 +12,8 @@ using Questly.Data.Context;
 namespace Questly.Data.Migrations
 {
     [DbContext(typeof(QuestlyDbContext))]
-    [Migration("20260628175124_AddPublished")]
-    partial class AddPublished
+    [Migration("20260629172120_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
