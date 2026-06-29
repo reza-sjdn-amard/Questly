@@ -31,5 +31,7 @@ namespace Questly.Services.Interfaces
         Task PublishSurveyAsync(int surveyId);
 
         Task UnpublishSurveyAsync(int surveyId);
+
+        Task<DashboardDto> GetDashboardAsync(string userId);
     }
 }

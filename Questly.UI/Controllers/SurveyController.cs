@@ -15,12 +15,12 @@ namespace Questly.UI.Controllers
                                   UserManager<ApplicationUser> _userManager,
                                   IMapper _mapper) : Controller
     {
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Dashboard()
         {
             var userId = _userManager.GetUserId(User);
-            var surveyDto = await _surveyService.GetUserSurveysAsync(userId);
-            var surveyModel = _mapper.Map<List<GetSurveyViewModel>>(surveyDto);
-            return View(surveyModel);
+            var dashboardDto = await _surveyService.GetDashboardAsync(userId);
+            var dashboardModel = _mapper.Map<DashboardViewModel>(dashboardDto);
+            return View(dashboardModel);
         }
 
         public IActionResult Create() => View();
@@ -53,7 +53,7 @@ namespace Questly.UI.Controllers
             {
                 var surveyDto = _mapper.Map<UpdateSurveyDto>(surveyModel);
                 await _surveyService.UpdateSurveyAsync(surveyDto);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Dashboard));
             }
 
             return View(surveyModel);
@@ -62,7 +62,7 @@ namespace Questly.UI.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             await _surveyService.DeleteSurveyAsync(id);
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Dashboard));
         }
 
         public async Task<IActionResult> Details(int id)
@@ -90,7 +90,7 @@ namespace Questly.UI.Controllers
                 return View("Take", takeSurveyModel);
             var takeSurveyDto = _mapper.Map<TakeSurveyDto>(takeSurveyModel);
             await _surveyService.SubmitSurveyAsync(takeSurveyDto);
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Dashboard));
         }
 
         [HttpGet]

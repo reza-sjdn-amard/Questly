@@ -1,0 +1,51 @@
+﻿@model DashboardViewModel
+
+<h1 class="mb-4">My Dashboard</h1>
+<ul id="dashboardSummary" class="d-flex p-0 justify-content-center gap-3" style="list-style-type: none;">
+    <li class="text-bg-warning py-2 px-4 rounded-2"><span class="fw-bold">Total Surveys: </span>@Model.TotalSurveys</li>
+    <li class="text-bg-warning py-2 px-4 rounded-2"><span class="fw-bold">Published Surveys: </span>@Model.PublishedSurveys</li>
+    <li class="text-bg-warning py-2 px-4 rounded-2"><span class="fw-bold">Draft Surveys: </span>@Model.DraftSurveys</li>
+    <li class="text-bg-warning py-2 px-4 rounded-2"><span class="fw-bold">Total Responses: </span>@Model.TotalResponses</li>
+</ul>
+<hr />
+
+<div class="d-flex justify-content-end">
+    <a asp-action="Create" class="mb-2 btn btn-primary">Create Survey</a>
+</div>
+<table class="table table-hover table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th>Title</th>
+            <th>ID</th>
+            <th>Status</th>
+            <th>Questions</th>
+            <th>Responses</th>
+            <th>Created At</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var survey in Model.Surveys)
+        {
+            <tr>
+                <td>@survey.Title</td>
+                <td>@survey.Id</td>
+                <td><span class="@(survey.IsPublished ? "bg-success" : "bg-danger") rounded-circle d-inline-block" style="padding: 6px;"></span></td>
+                <td>@survey.QuestionCount</td>
+                <td>@survey.ResponseCount</td>
+                <td>@survey.CreatedAt</td>
+                <td class="d-flex align-items-center gap-2">
+                    <a href="@Url.Action("Edit", new { id = survey.Id })" class="btn btn-sm btn-warning">Edit</a>
+                    <a href="@Url.Action("Delete", new { id = survey.Id })" class="btn btn-sm btn-danger">Delete</a>
+                    <a href="@Url.Action("Details", new { id = survey.Id })" class="btn btn-sm btn-success">Details</a>
+                    @if (survey.IsPublished)
+                    {
+                        <a href="@Url.Action("Take", new { id = survey.Id })" class="btn btn-sm btn-primary">Take</a>
+                        <a href="@Url.Action("Results", new { id = survey.Id })" class="btn btn-sm btn-info">Result</a>
+                    }
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

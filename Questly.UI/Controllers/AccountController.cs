@@ -38,7 +38,7 @@ namespace Questly.UI.Controllers
                 if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
                 {
                     await _signInManager.SignInAsync(user, model.RememberMe);
-                    return RedirectToAction("Index", "Survey");
+                    return RedirectToAction("Dashboard", "Survey");
                 }
 
                 ModelState.AddModelError(string.Empty, "Invalid login attempt.");

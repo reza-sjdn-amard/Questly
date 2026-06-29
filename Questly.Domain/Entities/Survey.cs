@@ -20,5 +20,7 @@ namespace Questly.Domain.Entities
         public string UserId { get; set; } = string.Empty;
 
         public ICollection<Question> Questions { get; set; } = new List<Question>();
+
+        public ICollection<SurveyResponse> SurveyResponses { get; set; } = new List<SurveyResponse>();
     }
 }
