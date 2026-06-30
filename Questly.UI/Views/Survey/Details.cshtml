@@ -1,34 +1,59 @@
 ﻿@model GetSurveyViewModel
 
 <div class="container w-50 mx-auto">
-    <div class="mb-4 d-flex justify-content-between align-items-center">
-        <h1>Survey Details</h1>
-
-        <div class="d-flex gap-1">
-            <form asp-action="Clone"
-                  asp-controller="Survey"
-                  asp-route-id="@Model.Id"
-                  method="post"
-                  class="d-inline">
-
-                <button class="btn btn-sm text-white" style="background-color: var(--bs-purple);">
-                    Clone
-                </button>
-
-            </form>
-
-            <form asp-action="@(Model.IsPublished ? "Unpublish" : "Publish")"
-                  asp-controller="Survey"
-                  asp-route-id="@Model.Id"
-                  method="post"
-                  class="d-inline">
-
-                <button class="btn btn-sm @(Model.IsPublished ? "btn-danger" : "btn-success")">
-                    @(Model.IsPublished ? "Unpublish" : "Publish")
-                </button>
-
-            </form>
+    <div class="mb-4 d-flex justify-content-between align-items-start">
+        <div>
+            <h1>Survey Details</h1>
+            
+            <p class="p-2 text-bg-danger rounded-2 fw-bold @(Model.IsOpen ? "d-none" : "")"
+               style="font-size: 14px;">
+                 This survey is currently closed.
+            </p>
         </div>
+
+        <div>
+            <div class="d-flex gap-1 justify-content-end mb-3">
+                <form asp-action="Clone"
+                      asp-controller="Survey"
+                      asp-route-id="@Model.Id"
+                      method="post"
+                      class="d-inline">
+
+                    <button class="btn btn-sm text-white" style="background-color: var(--bs-purple);">
+                        Clone
+                    </button>
+                </form>
+
+                <form asp-action="@(Model.IsPublished ? "Unpublish" : "Publish")"
+                      asp-controller="Survey"
+                      asp-route-id="@Model.Id"
+                      method="post"
+                      class="d-inline">
+
+                    <button class="btn btn-sm @(Model.IsPublished ? "btn-danger" : "btn-success")">
+                        @(Model.IsPublished ? "Unpublish" : "Publish")
+                    </button>
+                </form>
+            </div>
+            <div class="align-self-end">
+                <form asp-action="SetExpiration" method="post">
+                    <input type="hidden" name="id" value="@Model.Id" />
+
+                    <input type="datetime-local"
+                           name="closedAt"
+                           value="@(Model.ClosedAt?.ToString("yyyy-MM-ddTHH:mm"))"
+                           class="form-control form-control-sm mb-1" />
+
+                    <button class="btn btn-sm btn-secondary">
+                        Save Expiration
+                    </button>
+                    <button type="submit" class="btn btn-sm btn-outline-secondary">
+                        Remove Expiration
+                    </button>
+                </form>
+            </div>
+        </div>
+        
     </div>
     <ul class="list-group mb-4">
         <li class="list-group-item"><span class="fw-bold">Title: </span>@Model.Title</li>

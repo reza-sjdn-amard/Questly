@@ -8,6 +8,8 @@
 
         public bool IsPublished { get; set; }
 
+        public DateTime? ClosedAt { get; set; }
+
         public int QuestionCount { get; set; }
 
         public int ResponseCount { get; set; }

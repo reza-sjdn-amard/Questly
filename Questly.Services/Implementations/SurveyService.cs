@@ -248,5 +248,15 @@ namespace Questly.Services.Implementations
 
             return dashboardDto;
         }
+
+        public async Task SetExpirationAsync(int surveyId, DateTime? closedAt)
+        {
+            var surveyDto = await GetSurveyByIdAsync(surveyId);
+            if (surveyDto == null)
+                throw new Exception("Survey not found.");
+            surveyDto.ClosedAt = closedAt;
+            var updatedSurveyDto = _mapper.Map<UpdateSurveyDto>(surveyDto);
+            await UpdateSurveyAsync(updatedSurveyDto);
+        }
     }
 }

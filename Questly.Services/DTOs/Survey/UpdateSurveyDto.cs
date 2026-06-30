@@ -18,6 +18,8 @@ namespace Questly.Services.DTOs.Survey
 
         public DateTime? PublishedAt { get; set; }
 
+        public DateTime? ClosedAt { get; set; }
+
         public string UserId { get; set; } = string.Empty;
 
         public ICollection<UpdateSurveyQuestionDto> Questions { get; set; } = new List<UpdateSurveyQuestionDto>();

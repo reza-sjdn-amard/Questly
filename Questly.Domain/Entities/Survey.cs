@@ -1,6 +1,7 @@
 ﻿using Questly.Domain.Common;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace Questly.Domain.Entities
@@ -16,6 +17,17 @@ namespace Questly.Domain.Entities
         public bool IsPublished { get; set; }
 
         public DateTime? PublishedAt { get; set; }
+
+        public DateTime? ClosedAt { get; set; }
+
+        [NotMapped]
+        public bool IsOpen =>
+            !ClosedAt.HasValue || ClosedAt > DateTime.Now;
+
+        [NotMapped]
+        public bool IsAvailable =>
+            IsPublished &&
+            (!ClosedAt.HasValue || ClosedAt > DateTime.Now);
 
         public string UserId { get; set; } = string.Empty;
 
