@@ -10,6 +10,8 @@
 
         public int TotalResponses { get; set; }
 
+        public string? Search { get; set; }
+
         public List<DashboardSurveyItemViewModel> Surveys { get; set; } = new();
     }
 }

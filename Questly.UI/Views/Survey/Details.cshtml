@@ -39,7 +39,8 @@
                 <form asp-action="SetExpiration" method="post">
                     <input type="hidden" name="id" value="@Model.Id" />
 
-                    <input type="datetime-local"
+                    <input id="closedAt"
+                           type="datetime-local"
                            name="closedAt"
                            value="@(Model.ClosedAt?.ToString("yyyy-MM-ddTHH:mm"))"
                            class="form-control form-control-sm mb-1" />
@@ -47,7 +48,8 @@
                     <button class="btn btn-sm btn-secondary">
                         Save Expiration
                     </button>
-                    <button type="submit" class="btn btn-sm btn-outline-secondary">
+                    <button type="submit" class="btn btn-sm btn-outline-secondary"
+                            onclick="document.getElementById('closedAt').value='';">
                         Remove Expiration
                     </button>
                 </form>

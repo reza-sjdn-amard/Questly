@@ -13,6 +13,41 @@ namespace Questly.Services.Implementations
 {
     public class SurveyService(QuestlyDbContext _context, IMapper _mapper) : ISurveyService
     {
+        public async Task<DashboardDto> GetDashboardAsync(string userId, string? search)
+        {
+            var query = _context.Surveys
+                .Where(s => s.UserId == userId);
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = query.Where(s =>
+                    s.Title.Contains(search) ||
+                    (s.Description != null && s.Description.Contains(search)));
+            }
+
+            DashboardDto dashboardDto = new()
+            {
+                TotalSurveys = await query.CountAsync(),
+                PublishedSurveys = await query.CountAsync(s => s.IsPublished),
+                DraftSurveys = await query.CountAsync(s => !s.IsPublished),
+                TotalResponses = await query.SumAsync(s => s.SurveyResponses.Count()),
+                Surveys = await query
+                    .OrderByDescending(s => s.CreatedAt)
+                    .Select(s => new DashboardSurveyItemDto
+                    {
+                        Id = s.Id,
+                        Title = s.Title,
+                        IsPublished = s.IsPublished,
+                        QuestionCount = s.Questions.Count(),
+                        ResponseCount = s.SurveyResponses.Count(),
+                        CreatedAt = s.CreatedAt
+                    })
+                    .ToListAsync()
+            };
+
+            return dashboardDto;
+        }
+
         public async Task<int> CreateSurveyAsync(CreateSurveyDto surveyDto)
         {
             var survey = _mapper.Map<Survey>(surveyDto);
@@ -224,29 +259,6 @@ namespace Questly.Services.Implementations
             surveyDto.IsPublished = false;
             var updatedSurveyDto = _mapper.Map<UpdateSurveyDto>(surveyDto);
             await UpdateSurveyAsync(updatedSurveyDto);
-        }
-
-        public async Task<DashboardDto> GetDashboardAsync(string userId)
-        {
-            DashboardDto dashboardDto = new()
-            {
-                TotalSurveys = _context.Surveys.Count(s => s.UserId == userId),
-                PublishedSurveys = _context.Surveys.Count(s => s.UserId == userId && s.IsPublished),
-                DraftSurveys = _context.Surveys.Count(s => s.UserId == userId && !s.IsPublished),
-                TotalResponses = _context.SurveyResponses.Count(r => r.Survey.UserId == userId),
-                Surveys = await _context.Surveys.OrderByDescending(s => s.CreatedAt)
-                .Select(s => new DashboardSurveyItemDto()
-                {
-                    Id = s.Id,
-                    Title = s.Title,
-                    IsPublished = s.IsPublished,
-                    QuestionCount = s.Questions.Count(),
-                    ResponseCount = s.SurveyResponses.Count(),
-                    CreatedAt = s.CreatedAt
-                }).ToListAsync()
-            };
-
-            return dashboardDto;
         }
 
         public async Task SetExpirationAsync(int surveyId, DateTime? closedAt)

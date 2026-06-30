@@ -8,6 +8,8 @@ namespace Questly.Services.Interfaces
 {
     public interface ISurveyService
     {
+        Task<DashboardDto> GetDashboardAsync(string userId, string? search);
+
         Task<int> CreateSurveyAsync(CreateSurveyDto surveyDto);
 
         Task<GetSurveyDto?> GetSurveyByIdAsync(int id);
@@ -31,8 +33,6 @@ namespace Questly.Services.Interfaces
         Task PublishSurveyAsync(int surveyId);
 
         Task UnpublishSurveyAsync(int surveyId);
-
-        Task<DashboardDto> GetDashboardAsync(string userId);
 
         Task SetExpirationAsync(int surveyId, DateTime? closedAt);
     }

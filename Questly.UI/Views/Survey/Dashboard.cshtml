@@ -9,9 +9,24 @@
 </ul>
 <hr />
 
-<div class="d-flex justify-content-end">
-    <a asp-action="Create" class="mb-2 btn btn-primary">Create Survey</a>
+<div class="d-flex justify-content-between align-items-center mb-2">
+    <form method="get" class="d-flex gap-2">
+            <input asp-for="Search"
+                   class="form-control form-control-sm"
+                   placeholder="Search surveys..." />
+
+            <button class="btn btn-sm btn-outline-primary">
+                Search
+            </button>
+            <a asp-action="Dashboard"
+               class="btn btn-sm btn-secondary">
+                Clear
+            </a>
+    </form>
+
+    <a asp-action="Create" class="btn btn-primary">Create Survey</a>
 </div>
+
 <table class="table table-hover table-bordered">
     <thead class="table-dark">
         <tr>
