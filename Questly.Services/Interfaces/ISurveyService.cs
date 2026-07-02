@@ -8,7 +8,7 @@ namespace Questly.Services.Interfaces
 {
     public interface ISurveyService
     {
-        Task<DashboardDto> GetDashboardAsync(string userId, string? search);
+        Task<DashboardDto> GetDashboardAsync(string userId, string? search, int page = 1, int pageSize = 2);
 
         Task<int> CreateSurveyAsync(CreateSurveyDto surveyDto);
 

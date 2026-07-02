@@ -14,6 +14,12 @@ namespace Questly.Services.DTOs.Survey
 
         public int TotalResponses { get; set; }
 
+        public int CurrentPage { get; set; }
+
+        public int TotalPages { get; set; }
+
+        public int PageSize { get; set; } = 10;
+
         public List<DashboardSurveyItemDto> Surveys { get; set; } = new();
     }
 }

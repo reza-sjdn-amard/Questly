@@ -13,17 +13,21 @@ namespace Questly.Services.Implementations
 {
     public class SurveyService(QuestlyDbContext _context, IMapper _mapper) : ISurveyService
     {
-        public async Task<DashboardDto> GetDashboardAsync(string userId, string? search)
+        public async Task<DashboardDto> GetDashboardAsync(string userId, string? search, int page = 1, int pageSize = 2)
         {
-            var query = _context.Surveys
+            var query = _context.Surveys.AsNoTracking()
                 .Where(s => s.UserId == userId);
 
+            // Apply the search
             if (!string.IsNullOrWhiteSpace(search))
             {
                 query = query.Where(s =>
                     s.Title.Contains(search) ||
                     (s.Description != null && s.Description.Contains(search)));
             }
+
+            var totalCount = await query.CountAsync();
+            var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
 
             DashboardDto dashboardDto = new()
             {
@@ -33,6 +37,9 @@ namespace Questly.Services.Implementations
                 TotalResponses = await query.SumAsync(s => s.SurveyResponses.Count()),
                 Surveys = await query
                     .OrderByDescending(s => s.CreatedAt)
+                    // Apply the pagination
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
                     .Select(s => new DashboardSurveyItemDto
                     {
                         Id = s.Id,
@@ -44,6 +51,10 @@ namespace Questly.Services.Implementations
                     })
                     .ToListAsync()
             };
+
+            dashboardDto.CurrentPage = page;
+            dashboardDto.TotalPages = totalPages;
+            dashboardDto.PageSize = pageSize;
 
             return dashboardDto;
         }

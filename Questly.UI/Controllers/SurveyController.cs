@@ -15,10 +15,10 @@ namespace Questly.UI.Controllers
                                   UserManager<ApplicationUser> _userManager,
                                   IMapper _mapper) : Controller
     {
-        public async Task<IActionResult> Dashboard(string? search)
+        public async Task<IActionResult> Dashboard(string? search, int page = 1)
         {
             var userId = _userManager.GetUserId(User);
-            var dashboardDto = await _surveyService.GetDashboardAsync(userId, search);
+            var dashboardDto = await _surveyService.GetDashboardAsync(userId, search, page);
             var dashboardModel = _mapper.Map<DashboardViewModel>(dashboardDto);
             dashboardModel.Search = search;
             return View(dashboardModel);
