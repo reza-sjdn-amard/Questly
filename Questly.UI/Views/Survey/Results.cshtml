@@ -1,7 +1,18 @@
 ﻿@model SurveyResultsViewModel
 
 <div class="container w-50 mx-auto">
-    <h2>@Model.SurveyTitle</h2>
+    <div class="mb-2 d-flex justify-content-between align-items-center">
+        <h2>@Model.SurveyTitle</h2>
+        <div>
+            <div class="btn-group btn-group-sm">
+                <input type="radio" class="btn-check" name="chartTypeRadio" id="barTypeRadio" value="bar" autocomplete="off" checked>
+                <label class="btn btn-outline-primary" for="barTypeRadio">Bar Chart</label>
+
+                <input type="radio" class="btn-check" name="chartTypeRadio" id="pieTypeRadio" value="pie" autocomplete="off">
+                <label class="btn btn-outline-primary" for="pieTypeRadio">Pie Chart</label>
+            </div>
+        </div>
+    </div>
 
     @foreach (var question in Model.Questions)
     {
@@ -28,6 +39,8 @@
                         }
                     </tbody>
                 </table>
+
+                <canvas id="chart-@question.QuestionId" height="120"></canvas>
             </div>
         </div>
     }
@@ -36,4 +49,41 @@
         Back to My Surveys
     </a>
 </div>
+
+@section Scripts
+{
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+    @foreach (var question in Model.Questions)
+    {
+        <text>
+            const ctx@(question.QuestionId) = document.getElementById('chart-@question.QuestionId');
+    
+            new Chart(ctx@(question.QuestionId), {
+                type: 'bar',
+                data: {
+                    labels: [
+                        @Html.Raw(string.Join(",",
+                            question.Options.Select(o => $"'{o.OptionText}'")))
+                ],
+            datasets: [{
+                label: 'Votes',
+                data: [
+                    @string.Join(",", question.Options.Select(o => o.Percentage))
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+    </text>
+    }
+    </script>
+}
 

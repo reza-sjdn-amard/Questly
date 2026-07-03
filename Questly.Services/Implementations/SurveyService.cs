@@ -202,6 +202,17 @@ namespace Questly.Services.Implementations
                     });
                 }
 
+                // Calculate the Percentage
+                var totalVotes = questionDto.Options.Sum(o => o.Count);
+
+                foreach (var option in questionDto.Options)
+                {
+                    option.Percentage = totalVotes == 0
+                        ? 0
+                        : option.Count * 100.0 / totalVotes;
+                }
+
+
                 surveyResultDto.Questions.Add(questionDto);
             }
 

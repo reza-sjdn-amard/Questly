@@ -11,5 +11,7 @@ namespace Questly.Services.DTOs.Survey
         public string OptionText { get; set; } = string.Empty;
 
         public int Count { get; set; }
+
+        public double Percentage { get; set; }
     }
 }
