@@ -24,7 +24,15 @@
             </a>
     </form>
 
-    <a asp-action="Create" class="btn btn-primary">Create Survey</a>
+    <div class="d-flex gap-2">
+        <a asp-action="Templates"
+           asp-controller="SurveyTemplate"
+           class="btn btn-outline-primary">
+            Create From Template
+        </a>
+
+        <a asp-action="Create" class="btn btn-primary">Create Survey</a>
+    </div>
 </div>
 
 <table class="table table-hover table-bordered">

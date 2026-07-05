@@ -21,6 +21,10 @@ namespace Questly.Data.Context
         public DbSet<SurveyResponse> SurveyResponses => Set<SurveyResponse>();
         public DbSet<ResponseAnswer> ResponseAnswers => Set<ResponseAnswer>();
         public DbSet<ResponseAnswerOption> ResponseAnswerOptions => Set<ResponseAnswerOption>();
+        public DbSet<SurveyTemplate> SurveyTemplates => Set<SurveyTemplate>();
+        public DbSet<SurveyTemplateQuestion> SurveyTemplateQuestions => Set<SurveyTemplateQuestion>();
+        public DbSet<SurveyTemplateOption> SurveyTemplateOptions => Set<SurveyTemplateOption>();
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

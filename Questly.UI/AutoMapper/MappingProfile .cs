@@ -13,6 +13,11 @@ namespace Questly.UI.AutoMapper
     {
         public MappingProfile()
         {
+            // Entity <-> Entity
+            CreateMap<SurveyTemplate, Survey>();
+            CreateMap<SurveyTemplateQuestion, Question>();
+            CreateMap<SurveyTemplateOption, QuestionOption>();
+
             // Entity <-> DTO
             CreateMap<Survey, TakeSurveyDto>().ReverseMap();
             CreateMap<Question, TakeSurveyQuestionDto>().ReverseMap();
@@ -45,6 +50,8 @@ namespace Questly.UI.AutoMapper
             CreateMap<Question, UpdateSurveyQuestionDto>().ReverseMap();
             CreateMap<QuestionOption, UpdateQuestionOptionDto>().ReverseMap();
 
+            CreateMap<SurveyTemplate, SurveyTemplateDto>().ReverseMap();
+
             // DTO <-> ViewModel
             CreateMap<TakeSurveyDto, TakeSurveyViewModel>().ReverseMap();
             CreateMap<TakeSurveyQuestionDto, TakeSurveyQuestionViewModel>().ReverseMap();
@@ -67,6 +74,8 @@ namespace Questly.UI.AutoMapper
 
             CreateMap<DashboardDto, DashboardViewModel>().ReverseMap();
             CreateMap<DashboardSurveyItemDto, DashboardSurveyItemViewModel>().ReverseMap();
+
+            CreateMap<SurveyTemplateDto, SurveyTemplateViewModel>().ReverseMap();
 
             // DTO <-> DTO
             CreateMap<GetSurveyDto, UpdateSurveyDto>().ReverseMap();

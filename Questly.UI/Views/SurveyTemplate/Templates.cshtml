@@ -1,0 +1,48 @@
+﻿@model List<SurveyTemplateViewModel>
+
+<div class="container">
+
+    <h2>Survey Templates</h2>
+
+    <table class="table table-bordered table-hover mt-3">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Description</th>
+                <th width="150"></th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            @foreach (var template in Model)
+            {
+                <tr>
+                    <td>@template.Title</td>
+                    <td>@template.Category</td>
+                    <td>@template.Description</td>
+
+                    <td>
+                        <form asp-action="CreateFromTemplate" method="post">
+                            <input type="hidden"
+                                   name="templateId"
+                                   value="@template.Id" />
+
+                            <button class="btn btn-success btn-sm w-100">
+                                Use Template
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+
+    <a asp-action="Dashboard" asp-controller="Survey"
+       class="btn btn-outline-secondary">
+        Back to Dashboard
+    </a>
+
+</div>

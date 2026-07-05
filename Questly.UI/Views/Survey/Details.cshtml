@@ -132,6 +132,17 @@
 
                     <div class="card-body">
 
+                        @if (questions[i].Type == QuestionType.ShortText)
+                        {
+                            <input class="form-control" />
+                        }
+
+                        @if (questions[i].Type == QuestionType.LongText)
+                        {
+                            <textarea class="form-control"
+                                      rows="4"></textarea>
+                        }
+
                         @if (questions[i].Type == QuestionType.SingleChoice)
                         {
                             @if (questions[i].Options.Any())
@@ -183,7 +194,7 @@
 
     <div class="d-flex gap-2">
         <a href="@Url.Action("Create", "Question", new { surveyId = Model.Id })" class="btn btn-primary w-50">Add Question</a>
-        <a asp-action="Dashboard" class="btn btn-outline-info w-50">Back to My Surveys</a>
+        <a asp-action="Dashboard" class="btn btn-outline-info w-50">Back to Dashboard</a>
     </div>
 </div>
 
