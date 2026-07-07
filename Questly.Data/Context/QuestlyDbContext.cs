@@ -41,6 +41,12 @@ namespace Questly.Data.Context
                 .WithMany(q => q.ResponseAnswerOptions)
                 .HasForeignKey(o => o.ResponseAnswerId)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<QuestionOption>()
+                .HasOne(o => o.Question)
+                .WithMany(q => q.Options)
+                .HasForeignKey(o => o.QuestionId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

@@ -125,6 +125,12 @@
                         }
 
                         <div class="ms-auto">
+                            <a asp-controller="Question"
+                               asp-action="SkipLogic"
+                               asp-route-id="@questions[i].Id"
+                               class="btn btn-sm btn-outline-info">
+                                Skip Logic
+                            </a>
                             <a href="@Url.Action("Edit", "Question", new { id = questions[i].Id })" class="btn btn-sm btn-warning text-white">Ed</a>
                             <a href="@Url.Action("Delete", "Question", new { id = questions[i].Id, surveyId = Model.Id })" class="btn btn-sm btn-danger">Del</a>
                         </div>

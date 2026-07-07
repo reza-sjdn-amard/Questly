@@ -18,5 +18,9 @@ namespace Questly.Services.Interfaces
         Task<bool> DeleteQuestionAsync(int id);
 
         Task ReorderQuestionsAsync(int surveyId, List<int> questionIds);
+
+        Task<SkipLogicDto?> GetSkipLogicAsync(int questionId);
+
+        Task SaveSkipLogicAsync(SkipLogicDto dto);
     }
 }

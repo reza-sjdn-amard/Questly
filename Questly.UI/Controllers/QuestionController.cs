@@ -64,5 +64,31 @@ namespace Questly.UI.Controllers
             await _questionService.ReorderQuestionsAsync(surveyId, questionIds);
             return Ok();
         }
+
+        [HttpGet]
+        public async Task<IActionResult> SkipLogic(int id)
+        {
+            var dto = await _questionService.GetSkipLogicAsync(id);
+
+            if (dto == null)
+                return NotFound();
+
+            var model = _mapper.Map<SkipLogicViewModel>(dto);
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SkipLogic(SkipLogicViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var dto = _mapper.Map<SkipLogicDto>(model);
+
+            await _questionService.SaveSkipLogicAsync(dto);
+
+            return RedirectToAction("Details", "Survey", new { id = model.SurveyId });
+        }
     }
 }

@@ -65,5 +65,58 @@ namespace Questly.Services.Implementations
 
             await _context.SaveChangesAsync();
         }
+
+        public async Task<SkipLogicDto?> GetSkipLogicAsync(int questionId)
+        {
+            var question = await _context.Questions
+                .Include(q => q.Options.OrderBy(o => o.DisplayOrder))
+                .FirstOrDefaultAsync(q => q.Id == questionId);
+
+            if (question == null)
+                return null;
+
+            var dto = new SkipLogicDto
+            {
+                QuestionId = question.Id,
+                QuestionText = question.Text,
+                SurveyId = question.SurveyId
+            };
+
+            dto.Options = question.Options.Select(o => new SkipLogicOptionDto
+            {
+                OptionId = o.Id,
+                OptionText = o.Text,
+                NextQuestionId = o.NextQuestionId
+            }).ToList();
+
+            dto.Questions = await _context.Questions
+                .Where(q => q.SurveyId == question.SurveyId && q.Id != question.Id)
+                .OrderBy(q => q.DisplayOrder)
+                .Select(q => new QuestionLookupDto
+                {
+                    Id = q.Id,
+                    Text = q.Text
+                })
+                .ToListAsync();
+
+            return dto;
+        }
+
+        public async Task SaveSkipLogicAsync(SkipLogicDto dto)
+        {
+            var optionIds = dto.Options.Select(o => o.OptionId).ToList();
+
+            var options = await _context.QuestionOptions
+                .Where(o => optionIds.Contains(o.Id))
+                .ToListAsync();
+
+            foreach (var option in options)
+            {
+                var dtoOption = dto.Options.First(o => o.OptionId == option.Id);
+                option.NextQuestionId = dtoOption.NextQuestionId;
+            }
+
+            await _context.SaveChangesAsync();
+        }
     }
 }

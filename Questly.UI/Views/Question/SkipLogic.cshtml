@@ -1,0 +1,75 @@
+﻿@model SkipLogicViewModel
+
+<div class="container w-75 mx-auto">
+
+    <h2>Skip Logic</h2>
+
+    <div class="alert alert-info">
+        <strong>Question:</strong> @Model.QuestionText
+    </div>
+
+    <form asp-action="SkipLogic" method="post">
+
+        <input asp-for="SurveyId" type="hidden" />
+        <input asp-for="QuestionId" type="hidden" />
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Option</th>
+                    <th>Go To</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+            @for (int i = 0; i < Model.Options.Count; i++)
+            {
+                <tr>
+
+                    <td>
+                        @Model.Options[i].OptionText
+
+                        <input asp-for="Options[i].OptionId" type="hidden" />
+                        <input asp-for="Options[i].OptionText" type="hidden" />
+                    </td>
+
+                    <td>
+                        <select asp-for="Options[i].NextQuestionId"
+                                class="form-select">
+
+                            <option value="">Continue Normally</option>
+
+                            @foreach (var question in Model.Questions)
+                            {
+                                <option value="@question.Id">
+                                    @question.Text
+                                </option>
+                            }
+
+                        </select>
+                    </td>
+
+                </tr>
+            }
+
+            </tbody>
+
+        </table>
+
+        <div class="d-flex gap-2">
+            <button class="btn btn-primary w-50">
+                Save
+            </button>
+
+            <a asp-controller="Survey"
+               asp-action="Details"
+               asp-route-id="@Model.SurveyId"
+               class="btn btn-outline-secondary w-50">
+                Cancel
+            </a>
+        </div>
+
+    </form>
+
+</div>

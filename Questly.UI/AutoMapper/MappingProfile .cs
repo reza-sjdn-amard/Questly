@@ -77,6 +77,10 @@ namespace Questly.UI.AutoMapper
 
             CreateMap<SurveyTemplateDto, SurveyTemplateViewModel>().ReverseMap();
 
+            CreateMap<SkipLogicDto, SkipLogicViewModel>().ReverseMap();
+            CreateMap<SkipLogicOptionDto, SkipLogicOptionViewModel>().ReverseMap();
+            CreateMap<QuestionLookupDto, QuestionLookupViewModel>().ReverseMap();
+
             // DTO <-> DTO
             CreateMap<GetSurveyDto, UpdateSurveyDto>().ReverseMap();
             CreateMap<GetQuestionDto, UpdateQuestionDto>().ReverseMap();
