@@ -300,5 +300,13 @@ namespace Questly.Services.Implementations
             if (survey == null) return null;
             return await GetTakeSurveyDtoAsync(survey.Id);
         }
+
+        public async Task<bool> HasSkipLogic(int surveyId)
+        {
+            return _context.Questions
+                .Where(q => q.SurveyId == surveyId)
+                .SelectMany(q => q.Options)
+                .Any(o => o.NextQuestionId.HasValue);
+        }
     }
 }
