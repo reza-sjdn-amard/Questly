@@ -13,5 +13,6 @@ namespace Questly.Domain.Enums
         Dropdown = 5,
         Rating5 = 6,
         Rating10 = 7,
+        Matrix = 8,
     }
 }

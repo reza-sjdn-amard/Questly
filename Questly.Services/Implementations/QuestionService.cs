@@ -118,5 +118,68 @@ namespace Questly.Services.Implementations
 
             await _context.SaveChangesAsync();
         }
+
+        public async Task<MatrixQuestionDto?> GetMatrixQuestionAsync(int questionId)
+        {
+            var question = await _context.Questions
+                .Include(q => q.MatrixRows.OrderBy(r => r.DisplayOrder))
+                .Include(q => q.Options.OrderBy(c => c.DisplayOrder))
+                .FirstOrDefaultAsync(q => q.Id == questionId);
+
+            if (question == null)
+                return null;
+
+            return new MatrixQuestionDto
+            {
+                QuestionId = question.Id,
+                QuestionText = question.Text,
+                SurveyId = question.SurveyId,
+                Rows = question.MatrixRows.Select(r => new MatrixRowDto
+                {
+                    Id = r.Id,
+                    Text = r.Text
+                }).ToList(),
+                Options = question.Options.Select(c => new GetQuestionOptionDto
+                {
+                    Id = c.Id,
+                    Text = c.Text
+                }).ToList()
+            };
+        }
+
+        public async Task SaveMatrixQuestionAsync(MatrixQuestionDto dto)
+        {
+            var question = await _context.Questions
+                .Include(q => q.MatrixRows)
+                .Include(q => q.Options)
+                .FirstAsync(q => q.Id == dto.QuestionId);
+
+            question.MatrixRows.Clear();
+            question.Options.Clear();
+
+            int order = 1;
+
+            foreach (var row in dto.Rows)
+            {
+                question.MatrixRows.Add(new MatrixRow
+                {
+                    Text = row.Text,
+                    DisplayOrder = order++
+                });
+            }
+
+            order = 1;
+
+            foreach (var option in dto.Options)
+            {
+                question.Options.Add(new QuestionOption
+                {
+                    Text = option.Text,
+                    DisplayOrder = order++
+                });
+            }
+
+            await _context.SaveChangesAsync();
+        }
     }
 }

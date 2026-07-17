@@ -110,8 +110,8 @@ namespace Questly.UI.Controllers
             if (!ModelState.IsValid)
             {
                 string allErrors = string.Join("; ", ModelState.Values
-    .SelectMany(v => v.Errors)
-    .Select(e => e.ErrorMessage));
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage));
                 return View("Take", takeSurveyModel);
             }
 

@@ -56,16 +56,69 @@ namespace Questly.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    PublicId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsPublished = table.Column<bool>(type: "bit", nullable: false),
                     PublishedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    ClosedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AllowAnonymousResponses = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Surveys", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SurveySessionAnswers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    SessionKey = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    QuestionId = table.Column<int>(type: "int", nullable: false),
+                    AnswerText = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SelectedOptionId = table.Column<int>(type: "int", nullable: true),
+                    SelectedOptionIdsJson = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SurveySessionAnswers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SurveySessions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    SessionKey = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SurveyId = table.Column<int>(type: "int", nullable: false),
+                    CurrentQuestionId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsCompleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SurveySessions", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SurveyTemplates",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Category = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsOfficial = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SurveyTemplates", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -204,7 +257,8 @@ namespace Questly.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     SurveyId = table.Column<int>(type: "int", nullable: false),
-                    SubmittedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    SubmittedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -218,18 +272,68 @@ namespace Questly.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "SurveyTemplateQuestions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Type = table.Column<int>(type: "int", nullable: false),
+                    IsRequired = table.Column<bool>(type: "bit", nullable: false),
+                    DisplayOrder = table.Column<int>(type: "int", nullable: false),
+                    SurveyTemplateId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SurveyTemplateQuestions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SurveyTemplateQuestions_SurveyTemplates_SurveyTemplateId",
+                        column: x => x.SurveyTemplateId,
+                        principalTable: "SurveyTemplates",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MatrixRows",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DisplayOrder = table.Column<int>(type: "int", nullable: false),
+                    QuestionId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MatrixRows", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MatrixRows_Questions_QuestionId",
+                        column: x => x.QuestionId,
+                        principalTable: "Questions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "QuestionOptions",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    QuestionId = table.Column<int>(type: "int", nullable: false),
                     Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DisplayOrder = table.Column<int>(type: "int", nullable: false)
+                    DisplayOrder = table.Column<int>(type: "int", nullable: false),
+                    QuestionId = table.Column<int>(type: "int", nullable: false),
+                    NextQuestionId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_QuestionOptions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_QuestionOptions_Questions_NextQuestionId",
+                        column: x => x.NextQuestionId,
+                        principalTable: "Questions",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_QuestionOptions_Questions_QuestionId",
                         column: x => x.QuestionId,
@@ -246,7 +350,8 @@ namespace Questly.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     SurveyResponseId = table.Column<int>(type: "int", nullable: false),
                     QuestionId = table.Column<int>(type: "int", nullable: false),
-                    AnswerText = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    AnswerText = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MatrixRowId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -262,6 +367,27 @@ namespace Questly.Data.Migrations
                         column: x => x.SurveyResponseId,
                         principalTable: "SurveyResponses",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SurveyTemplateOptions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DisplayOrder = table.Column<int>(type: "int", nullable: false),
+                    SurveyTemplateQuestionId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SurveyTemplateOptions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SurveyTemplateOptions_SurveyTemplateQuestions_SurveyTemplateQuestionId",
+                        column: x => x.SurveyTemplateQuestionId,
+                        principalTable: "SurveyTemplateQuestions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -329,6 +455,16 @@ namespace Questly.Data.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_MatrixRows_QuestionId",
+                table: "MatrixRows",
+                column: "QuestionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_QuestionOptions_NextQuestionId",
+                table: "QuestionOptions",
+                column: "NextQuestionId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_QuestionOptions_QuestionId",
                 table: "QuestionOptions",
                 column: "QuestionId");
@@ -362,6 +498,16 @@ namespace Questly.Data.Migrations
                 name: "IX_SurveyResponses_SurveyId",
                 table: "SurveyResponses",
                 column: "SurveyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SurveyTemplateOptions_SurveyTemplateQuestionId",
+                table: "SurveyTemplateOptions",
+                column: "SurveyTemplateQuestionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SurveyTemplateQuestions_SurveyTemplateId",
+                table: "SurveyTemplateQuestions",
+                column: "SurveyTemplateId");
         }
 
         /// <inheritdoc />
@@ -383,7 +529,19 @@ namespace Questly.Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "MatrixRows");
+
+            migrationBuilder.DropTable(
                 name: "ResponseAnswerOptions");
+
+            migrationBuilder.DropTable(
+                name: "SurveySessionAnswers");
+
+            migrationBuilder.DropTable(
+                name: "SurveySessions");
+
+            migrationBuilder.DropTable(
+                name: "SurveyTemplateOptions");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -398,10 +556,16 @@ namespace Questly.Data.Migrations
                 name: "ResponseAnswers");
 
             migrationBuilder.DropTable(
+                name: "SurveyTemplateQuestions");
+
+            migrationBuilder.DropTable(
                 name: "Questions");
 
             migrationBuilder.DropTable(
                 name: "SurveyResponses");
+
+            migrationBuilder.DropTable(
+                name: "SurveyTemplates");
 
             migrationBuilder.DropTable(
                 name: "Surveys");

@@ -60,6 +60,44 @@
                 </div>
             </text>
             break;
+
+            case QuestionType.Matrix:
+                <table class="table table-bordered">
+
+                    <thead>
+                        <tr>
+                            <th class="bg-light"></th>
+
+                            @foreach (var option in question.Options)
+                            {
+                                <th class="text-center">@option.OptionText</th>
+                            }
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var row in question.MatrixRows)
+                        {
+                            <tr>
+
+                                <td>@row.Text</td>
+
+                                @foreach (var option in question.Options)
+                                {
+                                    <td class="text-center">
+                                        @(row.Results.FirstOrDefault(r =>
+                                                                r.OptionId == option.OptionId)?.Count ?? 0)
+                                    </td>
+                                }
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+            break;
         }
         </div>
     }

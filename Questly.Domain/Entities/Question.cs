@@ -21,5 +21,8 @@ namespace Questly.Domain.Entities
         public Survey Survey { get; set; } = null!;
 
         public ICollection<QuestionOption> Options { get; set; } = new List<QuestionOption>();
+
+        public ICollection<MatrixRow> MatrixRows { get; set; } = new List<MatrixRow>();
+
     }
 }

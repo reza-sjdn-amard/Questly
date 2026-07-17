@@ -1,0 +1,105 @@
+﻿@model MatrixQuestionViewModel
+
+<div class="container w-75 mx-auto">
+
+    <h2>Edit Matrix</h2>
+
+    <form asp-action="Matrix" method="post">
+
+        <input asp-for="SurveyId" type="hidden" />
+        <input asp-for="QuestionId" type="hidden" />
+
+        <div class="row">
+
+            <div id="rowsContainer" class="col-md-6">
+
+                <h5>Rows</h5>
+
+                @for (int i = 0; i < Model.Rows.Count; i++)
+                {
+                    <input asp-for="Rows[i].Id" type="hidden" />
+
+                    <input asp-for="Rows[i].Text"
+                           class="form-control mb-2" />
+                }
+
+            </div>
+
+            <div id="optionsContainer" class="col-md-6">
+
+                <h5>Options</h5>
+
+                @for (int i = 0; i < Model.Options.Count; i++)
+                {
+                    <input asp-for="Options[i].Id" type="hidden" />
+
+                    <input asp-for="Options[i].Text"
+                           class="form-control mb-2" />
+                }
+
+            </div>
+
+        </div>
+
+        <div class="d-flex gap-2 my-2">
+            <button type="button" id="addRow" class="btn btn-primary w-50">Add Row</button>
+            <button type="button" id="addOption" class="btn btn-danger w-50">Add Option</button>
+        </div>
+
+        <div class="d-flex gap-2">
+
+            <button class="btn btn-success w-50">
+                Save
+            </button>
+
+            <a asp-controller="Survey"
+               asp-action="Details"
+               asp-route-id="@Model.SurveyId"
+               class="btn btn-outline-secondary w-50">
+                Cancel
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+@section Scripts {
+    <script>
+        let rowIndex = @Model.Rows.Count;
+        let optionIndex = @Model.Options.Count;
+
+        $("#addRow").click(function () {
+
+            $("#rowsContainer").append(`
+                <div class="input-group mb-2">
+                    <input name="Rows[${rowIndex}].Text"
+                           class="form-control" />
+                    <button type="button" class="btn btn-danger remove-row">×</button>
+                </div>`);
+
+            rowIndex++;
+        });
+
+        $("#addOption").click(function () {
+
+            $("#optionsContainer").append(`
+                <div class="input-group mb-2">
+                    <input name="Options[${optionIndex}].Text"
+                           class="form-control" />
+                    <button type="button" class="btn btn-danger remove-option">×</button>
+                </div>`);
+
+            optionIndex++;
+        });
+
+        $(document).on("click", ".remove-row", function () {
+            $(this).closest(".input-group").remove();
+        });
+
+        $(document).on("click", ".remove-option", function () {
+            $(this).closest(".input-group").remove();
+        });
+    </script>
+}

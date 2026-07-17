@@ -22,5 +22,9 @@ namespace Questly.Services.Interfaces
         Task<SkipLogicDto?> GetSkipLogicAsync(int questionId);
 
         Task SaveSkipLogicAsync(SkipLogicDto dto);
+
+        Task<MatrixQuestionDto?> GetMatrixQuestionAsync(int questionId);
+
+        Task SaveMatrixQuestionAsync(MatrixQuestionDto dto);
     }
 }

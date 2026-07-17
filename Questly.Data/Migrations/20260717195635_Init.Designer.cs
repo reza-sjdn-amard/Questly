@@ -12,8 +12,8 @@ using Questly.Data.Context;
 namespace Questly.Data.Migrations
 {
     [DbContext(typeof(QuestlyDbContext))]
-    [Migration("20260705104541_ChangeNameToTitleOfSurveyTemplate")]
-    partial class ChangeNameToTitleOfSurveyTemplate
+    [Migration("20260717195635_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -227,6 +227,31 @@ namespace Questly.Data.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("Questly.Domain.Entities.MatrixRow", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("DisplayOrder")
+                        .HasColumnType("int");
+
+                    b.Property<int>("QuestionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuestionId");
+
+                    b.ToTable("MatrixRows");
+                });
+
             modelBuilder.Entity("Questly.Domain.Entities.Question", b =>
                 {
                     b.Property<int>("Id")
@@ -269,6 +294,9 @@ namespace Questly.Data.Migrations
                     b.Property<int>("DisplayOrder")
                         .HasColumnType("int");
 
+                    b.Property<int?>("NextQuestionId")
+                        .HasColumnType("int");
+
                     b.Property<int>("QuestionId")
                         .HasColumnType("int");
 
@@ -277,6 +305,8 @@ namespace Questly.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("NextQuestionId");
 
                     b.HasIndex("QuestionId");
 
@@ -293,6 +323,9 @@ namespace Questly.Data.Migrations
 
                     b.Property<string>("AnswerText")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("MatrixRowId")
+                        .HasColumnType("int");
 
                     b.Property<int>("QuestionId")
                         .HasColumnType("int");
@@ -396,6 +429,62 @@ namespace Questly.Data.Migrations
                     b.HasIndex("SurveyId");
 
                     b.ToTable("SurveyResponses");
+                });
+
+            modelBuilder.Entity("Questly.Domain.Entities.SurveySession", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CurrentQuestionId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("SessionKey")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("SurveyId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SurveySessions");
+                });
+
+            modelBuilder.Entity("Questly.Domain.Entities.SurveySessionAnswer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AnswerText")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("QuestionId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SelectedOptionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SelectedOptionIdsJson")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("SessionKey")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SurveySessionAnswers");
                 });
 
             modelBuilder.Entity("Questly.Domain.Entities.SurveyTemplate", b =>
@@ -532,6 +621,17 @@ namespace Questly.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Questly.Domain.Entities.MatrixRow", b =>
+                {
+                    b.HasOne("Questly.Domain.Entities.Question", "Question")
+                        .WithMany("MatrixRows")
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Question");
+                });
+
             modelBuilder.Entity("Questly.Domain.Entities.Question", b =>
                 {
                     b.HasOne("Questly.Domain.Entities.Survey", "Survey")
@@ -545,11 +645,17 @@ namespace Questly.Data.Migrations
 
             modelBuilder.Entity("Questly.Domain.Entities.QuestionOption", b =>
                 {
+                    b.HasOne("Questly.Domain.Entities.Question", "NextQuestion")
+                        .WithMany()
+                        .HasForeignKey("NextQuestionId");
+
                     b.HasOne("Questly.Domain.Entities.Question", "Question")
                         .WithMany("Options")
                         .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("NextQuestion");
 
                     b.Navigation("Question");
                 });
@@ -627,6 +733,8 @@ namespace Questly.Data.Migrations
 
             modelBuilder.Entity("Questly.Domain.Entities.Question", b =>
                 {
+                    b.Navigation("MatrixRows");
+
                     b.Navigation("Options");
                 });
 

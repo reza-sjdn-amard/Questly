@@ -13,6 +13,8 @@ namespace Questly.Domain.Entities
 
         public string? AnswerText { get; set; }
 
+        public int? MatrixRowId { get; set; }
+
         public SurveyResponse SurveyResponse { get; set; } = null!;
 
         public Question Question { get; set; } = null!;

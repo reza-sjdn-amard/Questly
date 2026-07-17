@@ -1,4 +1,5 @@
 ﻿using Questly.Domain.Enums;
+using Questly.Services.DTOs.Question;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -25,5 +26,17 @@ namespace Questly.Services.DTOs.Survey
         public List<int> SelectedOptionIds { get; set; } = new();
 
         public List<TakeSurveyOptionDto> Options { get; set; } = new();
+
+        public List<MatrixRowDto> MatrixRows { get; set; } = new();
+
+        public List<MatrixAnswerDto> MatrixAnswers { get; set; } = new();
+
+    }
+
+    public class MatrixAnswerDto
+    {
+        public int MatrixRowId { get; set; }
+
+        public int? SelectedOptionId { get; set; }
     }
 }

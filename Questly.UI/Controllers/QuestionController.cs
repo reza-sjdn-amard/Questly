@@ -90,5 +90,33 @@ namespace Questly.UI.Controllers
 
             return RedirectToAction("Details", "Survey", new { id = model.SurveyId });
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Matrix(int id)
+        {
+            var dto = await _questionService.GetMatrixQuestionAsync(id);
+
+            if (dto == null)
+                return NotFound();
+
+            var model = _mapper.Map<MatrixQuestionViewModel>(dto);
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Matrix(MatrixQuestionViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var dto = _mapper.Map<MatrixQuestionDto>(model);
+
+            await _questionService.SaveMatrixQuestionAsync(dto);
+
+            return RedirectToAction("Details", "Survey",
+                new { id = model.SurveyId });
+        }
     }
 }

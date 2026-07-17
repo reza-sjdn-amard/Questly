@@ -224,6 +224,31 @@ namespace Questly.Data.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("Questly.Domain.Entities.MatrixRow", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("DisplayOrder")
+                        .HasColumnType("int");
+
+                    b.Property<int>("QuestionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuestionId");
+
+                    b.ToTable("MatrixRows");
+                });
+
             modelBuilder.Entity("Questly.Domain.Entities.Question", b =>
                 {
                     b.Property<int>("Id")
@@ -295,6 +320,9 @@ namespace Questly.Data.Migrations
 
                     b.Property<string>("AnswerText")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("MatrixRowId")
+                        .HasColumnType("int");
 
                     b.Property<int>("QuestionId")
                         .HasColumnType("int");
@@ -590,6 +618,17 @@ namespace Questly.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Questly.Domain.Entities.MatrixRow", b =>
+                {
+                    b.HasOne("Questly.Domain.Entities.Question", "Question")
+                        .WithMany("MatrixRows")
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Question");
+                });
+
             modelBuilder.Entity("Questly.Domain.Entities.Question", b =>
                 {
                     b.HasOne("Questly.Domain.Entities.Survey", "Survey")
@@ -691,6 +730,8 @@ namespace Questly.Data.Migrations
 
             modelBuilder.Entity("Questly.Domain.Entities.Question", b =>
                 {
+                    b.Navigation("MatrixRows");
+
                     b.Navigation("Options");
                 });
 

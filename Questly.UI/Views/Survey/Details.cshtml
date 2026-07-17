@@ -191,6 +191,16 @@
                             }
                         }
 
+                        @if (questions[i].Type == QuestionType.Matrix)
+                        {
+                            <a asp-controller="Question"
+                               asp-action="Matrix"
+                               asp-route-id="@questions[i].Id"
+                               class="btn btn-sm btn-outline-primary">
+                                Edit Matrix
+                            </a>
+                        }
+
                     </div>
 
                 </div>

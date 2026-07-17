@@ -112,6 +112,52 @@
                             }
                             </div>
                             break;
+
+                        case QuestionType.Matrix:
+
+                            <table class="table table-bordered">
+
+                                <thead>
+                                    <tr>
+                                        <th class="bg-light"></th>
+
+                                        @foreach (var option in question.Options)
+                                        {
+                                            <th class="text-center">@option.Text</th>
+                                        }
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+
+                                    @for (int r = 0; r < question.MatrixRows.Count; r++)
+                                    {
+                                        <tr>
+
+                                            <td>@question.MatrixRows[r].Text</td>
+
+                                            <input type="hidden"
+                                                   name="Questions[@i].MatrixAnswers[@r].MatrixRowId"
+                                                   value="@question.MatrixRows[r].Id" />
+
+                                            @foreach (var option in question.Options)
+                                            {
+                                                <td class="text-center">
+                                                    <input type="radio"
+                                                           name="Questions[@i].MatrixAnswers[@r].SelectedOptionId"
+                                                           value="@option.Id" />
+                                                </td>
+                                            }
+
+                                        </tr>
+                                    }
+
+                                </tbody>
+
+                            </table>
+
+                            break;
+
                     }
 
                 </div>

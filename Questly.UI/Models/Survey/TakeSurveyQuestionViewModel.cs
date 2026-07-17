@@ -1,4 +1,5 @@
 ﻿using Questly.Domain.Enums;
+using Questly.UI.Models.Question;
 
 namespace Questly.UI.Models.Survey
 {
@@ -22,5 +23,17 @@ namespace Questly.UI.Models.Survey
         public List<int> SelectedOptionIds { get; set; } = new();
 
         public List<TakeSurveyOptionViewModel> Options { get; set; } = new();
+
+        public List<MatrixRowViewModel> MatrixRows { get; set; } = new();
+
+        public List<MatrixAnswerViewModel> MatrixAnswers { get; set; } = new();
+
+    }
+
+    public class MatrixAnswerViewModel
+    {
+        public int MatrixRowId { get; set; }
+
+        public int? SelectedOptionId { get; set; }
     }
 }

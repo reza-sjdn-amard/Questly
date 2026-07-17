@@ -45,6 +45,8 @@ namespace Questly.UI.AutoMapper
                 .ForMember(dest => dest.QuestionId, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.QuestionText, opt => opt.MapFrom(src => src.Text));
 
+            CreateMap<MatrixRow, MatrixRowDto>().ReverseMap();
+
             // DTO -> Entity
             CreateMap<CreateQuestionDto, Question>()
                 .ForMember(dest => dest.Options,
@@ -93,6 +95,12 @@ namespace Questly.UI.AutoMapper
             CreateMap<QuestionLookupDto, QuestionLookupViewModel>().ReverseMap();
 
             CreateMap<TakeQuestionDto, TakeQuestionViewModel>().ReverseMap();
+
+            CreateMap<MatrixQuestionDto, MatrixQuestionViewModel>().ReverseMap();
+            CreateMap<MatrixRowDto, MatrixRowViewModel>().ReverseMap();
+            CreateMap<MatrixAnswerDto, MatrixAnswerViewModel>().ReverseMap();
+            CreateMap<MatrixRowResultDto, MatrixRowResultViewModel>().ReverseMap();
+            CreateMap<MatrixCellResultDto, MatrixCellResultViewModel>().ReverseMap();
 
             // DTO <-> DTO
             CreateMap<GetSurveyDto, UpdateSurveyDto>().ReverseMap();
