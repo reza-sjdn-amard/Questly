@@ -1,4 +1,5 @@
 ﻿using Questly.Domain.Enums;
+using Questly.Services.DTOs.Survey;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -17,6 +18,7 @@ namespace Questly.Services.DTOs.Question
 
         public bool IsRequired { get; set; }
 
-        public List<string> Options { get; set; } = [];
+        public List<UpdateQuestionOptionDto> Options { get; set; } = [];
+
     }
 }

@@ -1,4 +1,4 @@
-﻿@model GetQuestionViewModel
+﻿@model UpdateQuestionViewModel
 
 <div class="container w-50 mx-auto">
     <h2>Edit Question</h2>
@@ -31,11 +31,11 @@
         <h4>Options</h4>
 
         <div id="optionsContainer">
-            @foreach(var option in Model.Options)
+            @for (int i = 0; i < Model.Options.Count; i++)
             {
-                <input name="Options" class="form-control mb-2" value="@option.Text" />
+                <input asp-for="@Model.Options[i].Id" type="hidden" />
+                <input asp-for="@Model.Options[i].Text" class="form-control mb-2" />
             }
-                
         </div>
 
         <div class="d-flex gap-2">

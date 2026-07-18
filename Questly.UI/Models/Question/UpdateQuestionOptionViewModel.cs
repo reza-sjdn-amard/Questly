@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Questly.Services.DTOs.Survey
+﻿namespace Questly.UI.Models.Question
 {
-    public class UpdateQuestionOptionDto
+    public class UpdateQuestionOptionViewModel
     {
         public int Id { get; set; }
 
         public int QuestionId { get; set; }
 
         public string Text { get; set; } = string.Empty;
-
     }
 }
