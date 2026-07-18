@@ -35,9 +35,11 @@ namespace Questly.Services.Implementations
 
         public async Task<bool> UpdateQuestionAsync(UpdateQuestionDto questionDto)
         {
-            var question = await _context.Questions.FindAsync(questionDto.Id);
-            _context.QuestionOptions.Where(o => o.QuestionId == questionDto.Id).ExecuteDelete();
-            _mapper.Map(questionDto, question);
+            var question = await _context.Questions
+                .Include(q => q.Options)
+                .FirstOrDefaultAsync(q => q.Id == questionDto.Id);
+            var mappedQuestion = _mapper.Map(questionDto, question);
+            _context.Questions.Update(mappedQuestion);
             await _context.SaveChangesAsync();
             return true;
         }

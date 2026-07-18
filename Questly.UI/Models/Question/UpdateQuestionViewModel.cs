@@ -14,6 +14,6 @@ namespace Questly.UI.Models.Question
 
         public bool IsRequired { get; set; }
 
-        public List<string> Options { get; set; } = [];
+        public List<UpdateQuestionOptionViewModel> Options { get; set; } = [];
     }
 }

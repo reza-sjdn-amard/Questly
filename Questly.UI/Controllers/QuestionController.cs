@@ -34,8 +34,9 @@ namespace Questly.UI.Controllers
 
         public async Task<IActionResult> Edit(int id)
         {
-            var surveyDto = await _questionService.GetQuestionByIdAsync(id);
-            var question = _mapper.Map<GetQuestionViewModel>(surveyDto);
+            var questionDto = await _questionService.GetQuestionByIdAsync(id);
+            var updateQuestionDto = _mapper.Map<UpdateQuestionDto>(questionDto);
+            var question = _mapper.Map<UpdateQuestionViewModel>(updateQuestionDto);
             return View(question);
         }
 
