@@ -12,5 +12,9 @@ namespace Questly.Services.DTOs.Survey
 
         public string Text { get; set; } = string.Empty;
 
+        public int DisplayOrder { get; set; }
+
+        public int? NextQuestionId { get; set; }
+
     }
 }

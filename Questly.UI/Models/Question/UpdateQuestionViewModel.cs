@@ -8,6 +8,8 @@ namespace Questly.UI.Models.Question
 
         public int SurveyId { get; set; }
 
+        public int DisplayOrder { get; set; }
+
         public string Text { get; set; } = string.Empty;
 
         public QuestionType Type { get; set; }

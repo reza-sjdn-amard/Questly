@@ -7,6 +7,7 @@
 
         <input asp-for="Id" type="hidden" />
         <input asp-for="SurveyId" type="hidden" />
+        <input asp-for="DisplayOrder" type="hidden" />
 
         <div class="mb-3">
             <label asp-for="Text" class="form-label"></label>
@@ -34,6 +35,8 @@
             @for (int i = 0; i < Model.Options.Count; i++)
             {
                 <input asp-for="@Model.Options[i].Id" type="hidden" />
+                <input asp-for="@Model.Options[i].DisplayOrder" type="hidden" />
+                <input asp-for="@Model.Options[i].NextQuestionId" type="hidden" />
                 <input asp-for="@Model.Options[i].Text" class="form-control mb-2" />
             }
         </div>
