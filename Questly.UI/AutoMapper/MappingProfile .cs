@@ -102,6 +102,7 @@ namespace Questly.UI.AutoMapper
             CreateMap<MatrixAnswerDto, MatrixAnswerViewModel>().ReverseMap();
             CreateMap<MatrixRowResultDto, MatrixRowResultViewModel>().ReverseMap();
             CreateMap<MatrixCellResultDto, MatrixCellResultViewModel>().ReverseMap();
+            CreateMap<SendInvitationDto, SendInvitationViewModel>().ReverseMap();
 
             // DTO <-> DTO
             CreateMap<GetSurveyDto, UpdateSurveyDto>().ReverseMap();
