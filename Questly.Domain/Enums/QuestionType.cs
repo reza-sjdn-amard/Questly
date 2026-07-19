@@ -14,5 +14,6 @@ namespace Questly.Domain.Enums
         Rating5 = 6,
         Rating10 = 7,
         Matrix = 8,
+        FileUpload = 9,
     }
 }

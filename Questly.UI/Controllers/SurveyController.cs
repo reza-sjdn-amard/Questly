@@ -15,7 +15,8 @@ namespace Questly.UI.Controllers
 {
     public class SurveyController(ISurveyService _surveyService,
                                   UserManager<ApplicationUser> _userManager,
-                                  IMapper _mapper) : Controller
+                                  IMapper _mapper,
+                                  IWebHostEnvironment _webHostEnvironment) : Controller
     {
         public async Task<IActionResult> Dashboard(string? search, int page = 1)
         {
@@ -115,8 +116,29 @@ namespace Questly.UI.Controllers
                 return View("Take", takeSurveyModel);
             }
 
-
             var takeSurveyDto = _mapper.Map<TakeSurveyDto>(takeSurveyModel);
+
+            for (int i = 0; i < takeSurveyModel.Questions.Count; i++)
+            {
+                var uploadedFile = takeSurveyModel.Questions[i].UploadedFile;
+
+                if (uploadedFile != null && uploadedFile.Length > 0)
+                {
+                    var fileName = Guid.NewGuid() +
+                        Path.GetExtension(uploadedFile.FileName);
+
+                    var path = Path.Combine(
+                        _webHostEnvironment.WebRootPath,
+                        "uploads",
+                        fileName);
+
+                    using var stream = new FileStream(path, FileMode.Create);
+                    await uploadedFile.CopyToAsync(stream);
+
+                    takeSurveyDto.Questions[i].FileName = uploadedFile.FileName;
+                    takeSurveyDto.Questions[i].FilePath = "/uploads/" + fileName;
+                }
+            }
 
             string? userId = User.Identity!.IsAuthenticated
                 ? User.FindFirstValue(ClaimTypes.NameIdentifier)

@@ -20,5 +20,9 @@ namespace Questly.Domain.Entities
         public Question Question { get; set; } = null!;
 
         public ICollection<ResponseAnswerOption> ResponseAnswerOptions { get; set; } = new List<ResponseAnswerOption>();
+
+        public string? FileName { get; set; }
+
+        public string? FilePath { get; set; }
     }
 }

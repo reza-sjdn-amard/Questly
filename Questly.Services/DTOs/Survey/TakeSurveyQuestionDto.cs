@@ -31,6 +31,10 @@ namespace Questly.Services.DTOs.Survey
 
         public List<MatrixAnswerDto> MatrixAnswers { get; set; } = new();
 
+        public string? FileName { get; set; }
+
+        public string? FilePath { get; set; }
+
     }
 
     public class MatrixAnswerDto

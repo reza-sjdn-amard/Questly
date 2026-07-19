@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Questly.Data.Context;
 
@@ -11,9 +12,11 @@ using Questly.Data.Context;
 namespace Questly.Data.Migrations
 {
     [DbContext(typeof(QuestlyDbContext))]
-    partial class QuestlyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260718153338_AddFileNameAndFilePathProperties")]
+    partial class AddFileNameAndFilePathProperties
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -410,37 +413,6 @@ namespace Questly.Data.Migrations
                     b.ToTable("Surveys");
                 });
 
-            modelBuilder.Entity("Questly.Domain.Entities.SurveyInvitation", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsOpened")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsResponded")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("SentAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("SurveyId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SurveyId");
-
-                    b.ToTable("SurveyInvitations");
-                });
-
             modelBuilder.Entity("Questly.Domain.Entities.SurveyResponse", b =>
                 {
                     b.Property<int>("Id")
@@ -730,17 +702,6 @@ namespace Questly.Data.Migrations
                     b.Navigation("QuestionOption");
 
                     b.Navigation("ResponseAnswer");
-                });
-
-            modelBuilder.Entity("Questly.Domain.Entities.SurveyInvitation", b =>
-                {
-                    b.HasOne("Questly.Domain.Entities.Survey", "Survey")
-                        .WithMany()
-                        .HasForeignKey("SurveyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Survey");
                 });
 
             modelBuilder.Entity("Questly.Domain.Entities.SurveyResponse", b =>

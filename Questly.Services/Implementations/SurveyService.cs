@@ -164,7 +164,9 @@ namespace Questly.Services.Implementations
                     var answer = new ResponseAnswer
                     {
                         QuestionId = question.Id,
-                        AnswerText = question.AnswerText
+                        AnswerText = question.AnswerText,
+                        FileName = question.FileName,
+                        FilePath = question.FilePath,
                     };
 
                     foreach (var optionId in question.SelectedOptionIds)

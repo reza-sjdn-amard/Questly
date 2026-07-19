@@ -28,6 +28,8 @@ namespace Questly.UI.Models.Survey
 
         public List<MatrixAnswerViewModel> MatrixAnswers { get; set; } = new();
 
+        public IFormFile? UploadedFile { get; set; }
+
     }
 
     public class MatrixAnswerViewModel

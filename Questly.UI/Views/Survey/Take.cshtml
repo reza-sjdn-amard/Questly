@@ -10,7 +10,7 @@
 
     <hr />
 
-    <form asp-action="Submit" asp-controller="Survey" method="post">
+    <form asp-action="Submit" asp-controller="Survey" method="post" enctype="multipart/form-data">
 
         <input asp-for="Id" type="hidden" />
 
@@ -155,7 +155,12 @@
                                 </tbody>
 
                             </table>
+                            break;
 
+                        case QuestionType.FileUpload:
+                            <input asp-for="Questions[i].UploadedFile"
+                                   type="file"
+                                   class="form-control" />
                             break;
 
                     }
