@@ -27,6 +27,7 @@ namespace Questly.Data.Context
         public DbSet<SurveySession> SurveySessions => Set<SurveySession>();
         public DbSet<SurveySessionAnswer> SurveySessionAnswers => Set<SurveySessionAnswer>();
         public DbSet<MatrixRow> MatrixRows => Set<MatrixRow>();
+        public DbSet<SurveyInvitation> SurveyInvitations => Set<SurveyInvitation>();
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
